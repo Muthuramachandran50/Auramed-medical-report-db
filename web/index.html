@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraMed Diagnostics DBMS</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    <span>AuraMed</span>
+                </div>
+                <small class="subtitle">Diagnostics DBMS</small>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="patients">
+                    <i class="fa-solid fa-user-injured"></i>
+                    <span>Patients</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="doctors">
+                    <i class="fa-solid fa-user-md"></i>
+                    <span>Doctors</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="tests">
+                    <i class="fa-solid fa-vial"></i>
+                    <span>Tests</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="reports">
+                    <i class="fa-solid fa-file-medical"></i>
+                    <span>Medical Reports</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="details">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Report Details</span>
+                </a>
+                <div class="menu-divider">Queries & Reports</div>
+                <a href="#" class="menu-item" data-tab="patient-search">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i>
+                    <span>Patient Search</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="test-counts">
+                    <i class="fa-solid fa-users-viewfinder"></i>
+                    <span>Test Statistics</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="themeToggle" class="theme-btn">
+                    <i class="fa-solid fa-sun"></i>
+                    <span>Light Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageDescription" class="text-muted">Welcome to AuraMed Diagnostic database management portal.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="status-indicator">
+                        <span class="dot online"></span>
+                        <span>DBMS Connected</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Container -->
+            <div class="content-body">
+                
+                <!-- 1. DASHBOARD TAB -->
+                <section id="tab-dashboard" class="tab-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon patient-icon"><i class="fa-solid fa-user-injured"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statPatientsCount">0</h3>
+                                <p>Total Patients</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon doctor-icon"><i class="fa-solid fa-user-md"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statDoctorsCount">0</h3>
+                                <p>Active Doctors</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon test-icon"><i class="fa-solid fa-vial"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statTestsCount">0</h3>
+                                <p>Tests Available</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon report-icon"><i class="fa-solid fa-file-medical"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statReportsCount">0</h3>
+                                <p>Medical Reports</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-details-grid">
+                        <div class="dashboard-card chart-container">
+                            <div class="card-header">
+                                <h2><i class="fa-solid fa-chart-column"></i> Test Analytics per Patient</h2>
+                            </div>
+                            <div class="card-body">
+                                <div id="dashboardAnalyticsList" class="analytics-bar-list">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-card recent-activity">
+                            <div class="card-header">
+                                <h2><i class="fa-solid fa-clock-rotate-left"></i> Quick DB Actions</h2>
+                            </div>
+                            <div class="card-body quick-links">
+                                <button class="quick-btn" onclick="switchTab('patients')">
+                                    <i class="fa-solid fa-user-plus"></i> Manage Patients
+                                </button>
+                                <button class="quick-btn" onclick="switchTab('doctors')">
+                                    <i class="fa-solid fa-user-doctor"></i> Manage Doctors
+                                </button>
+                                <button class="quick-btn" onclick="switchTab('reports')">
+                                    <i class="fa-solid fa-file-medical"></i> Create Medical Report
+                                </button>
+                                <button class="quick-btn" onclick="switchTab('patient-search')">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Run Joins Query
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. PATIENTS TAB -->
+                <section id="tab-patients" class="tab-section">
+                    <div class="action-header">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="patientSearchInput" placeholder="Search patients by name or phone...">
+                        </div>
+                        <button class="btn btn-primary" id="openAddPatientBtn">
+                            <i class="fa-solid fa-plus"></i> Add Patient
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="patientsTable">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>DOB</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 3. DOCTORS TAB -->
+                <section id="tab-doctors" class="tab-section">
+                    <div class="action-header">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="doctorSearchInput" placeholder="Search doctors by name or specialty...">
+                        </div>
+                        <button class="btn btn-primary" id="openAddDoctorBtn">
+                            <i class="fa-solid fa-plus"></i> Add Doctor
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="doctorsTable">
+                            <thead>
+                                <tr>
+                                    <th>Doctor ID</th>
+                                    <th>Name</th>
+                                    <th>Specialization</th>
+                                    <th>Phone</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 4. TESTS TAB -->
+                <section id="tab-tests" class="tab-section">
+                    <div class="action-header">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="testSearchInput" placeholder="Search test names...">
+                        </div>
+                        <button class="btn btn-primary" id="openAddTestBtn">
+                            <i class="fa-solid fa-plus"></i> Add Test
+                        </button>
+                    </div>
+                    <div class="table-container text-center-table">
+                        <table id="testsTable">
+                            <thead>
+                                <tr>
+                                    <th>Test ID</th>
+                                    <th>Test Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 5. MEDICAL REPORTS TAB -->
+                <section id="tab-reports" class="tab-section">
+                    <div class="action-header">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="reportSearchInput" placeholder="Search by patient ID or doctor ID...">
+                        </div>
+                        <button class="btn btn-primary" id="openAddReportBtn">
+                            <i class="fa-solid fa-plus"></i> Create Report
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="reportsTable">
+                            <thead>
+                                <tr>
+                                    <th>Report ID</th>
+                                    <th>Patient</th>
+                                    <th>Doctor</th>
+                                    <th>Report Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 6. REPORT DETAILS TAB -->
+                <section id="tab-details" class="tab-section">
+                    <div class="action-header">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="detailSearchInput" placeholder="Search by Report ID, Result, Diagnosis...">
+                        </div>
+                        <button class="btn btn-primary" id="openAddDetailBtn">
+                            <i class="fa-solid fa-plus"></i> Add Report Details
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="detailsTable">
+                            <thead>
+                                <tr>
+                                    <th>Detail ID</th>
+                                    <th>Report ID</th>
+                                    <th>Test Name</th>
+                                    <th>Result</th>
+                                    <th>Diagnosis</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS Populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 7. QUERY: PATIENT SEARCH -->
+                <section id="tab-patient-search" class="tab-section">
+                    <div class="query-card">
+                        <div class="query-header">
+                            <h2>Query Patient Diagnostics Report (JOIN Query)</h2>
+                            <p>Executes a SQL JOIN query connecting Patients, Medical Reports, Report Details, and Tests to view a complete patient chart.</p>
+                        </div>
+                        <div class="query-form">
+                            <div class="search-input-group">
+                                <label for="queryPatientName">Enter Patient Name:</label>
+                                <div class="input-with-button">
+                                    <input type="text" id="queryPatientName" placeholder="e.g. naveth, Priya" required>
+                                    <button class="btn btn-primary" id="runPatientQueryBtn">
+                                        <i class="fa-solid fa-magnifying-glass"></i> Search DB
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="query-results-box" id="queryPatientResultsContainer" style="display: none;">
+                        <h3 id="queryResultsHeader">Results for "..."</h3>
+                        <div class="table-container">
+                            <table id="queryPatientTable">
+                                <thead>
+                                    <tr>
+                                        <th>Patient Name</th>
+                                        <th>Test Name</th>
+                                        <th>Result</th>
+                                        <th>Diagnosis</th>
+                                        <th>Report Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="empty-state" id="queryPatientEmptyState">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                        <p>Search a patient's name to fetch combined diagnostics records.</p>
+                    </div>
+                </section>
+
+                <!-- 8. QUERY: TEST COUNT STATISTICS -->
+                <section id="tab-test-counts" class="tab-section">
+                    <div class="query-card">
+                        <div class="query-header">
+                            <h2>SQL Aggregate Join Query: Test Counts Per Patient</h2>
+                            <p>Calculates the number of diagnostic tests taken by each patient using `COUNT`, `JOIN`, and `GROUP BY` SQL operations.</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-charts-container">
+                        <div class="table-card">
+                            <div class="table-container">
+                                <table id="testCountsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Patient Name</th>
+                                            <th>Number of Tests Taken</th>
+                                            <th>Visual Representation</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- JS Populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- --- MODALS FOR CRUD OPERATIONS --- -->
+
+    <!-- Patient Modal -->
+    <div class="modal" id="patientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="patientModalTitle">Add New Patient</h2>
+                <button class="close-modal-btn" onclick="closeModal('patientModal')">&times;</button>
+            </div>
+            <form id="patientForm">
+                <input type="hidden" id="patientFormMode" value="add">
+                <div class="form-group">
+                    <label for="patientFormId">Patient ID *</label>
+                    <input type="number" id="patientFormId" placeholder="e.g. 105" required>
+                    <small class="form-help">Enter a unique numeric patient ID.</small>
+                </div>
+                <div class="form-group">
+                    <label for="patientFormName">Full Name *</label>
+                    <input type="text" id="patientFormName" placeholder="Letters and spaces only" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientFormGender">Gender *</label>
+                    <select id="patientFormGender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="patientFormDob">Date of Birth *</label>
+                    <input type="date" id="patientFormDob" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientFormPhone">Phone Number *</label>
+                    <input type="tel" id="patientFormPhone" placeholder="10-15 digits" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientFormEmail">Email Address *</label>
+                    <input type="email" id="patientFormEmail" placeholder="name@domain.com" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('patientModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="patientSubmitBtn">Save Patient</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Doctor Modal -->
+    <div class="modal" id="doctorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="doctorModalTitle">Add New Doctor</h2>
+                <button class="close-modal-btn" onclick="closeModal('doctorModal')">&times;</button>
+            </div>
+            <form id="doctorForm">
+                <input type="hidden" id="doctorFormMode" value="add">
+                <input type="hidden" id="doctorFormId">
+                <div class="form-group">
+                    <label for="doctorFormName">Doctor Name *</label>
+                    <input type="text" id="doctorFormName" placeholder="Dr. First Last (letters & spaces only)" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctorFormSpecialization">Specialization *</label>
+                    <input type="text" id="doctorFormSpecialization" placeholder="e.g. Cardiology" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctorFormPhone">Phone Number *</label>
+                    <input type="tel" id="doctorFormPhone" placeholder="10-15 digits" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('doctorModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="doctorSubmitBtn">Save Doctor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Test Modal -->
+    <div class="modal" id="testModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="testModalTitle">Add New Diagnostic Test</h2>
+                <button class="close-modal-btn" onclick="closeModal('testModal')">&times;</button>
+            </div>
+            <form id="testForm">
+                <input type="hidden" id="testFormMode" value="add">
+                <input type="hidden" id="testFormId">
+                <div class="form-group">
+                    <label for="testFormName">Test Name *</label>
+                    <input type="text" id="testFormName" placeholder="Alphanumeric and spaces only" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('testModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="testSubmitBtn">Save Test</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Medical Report Modal -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="reportModalTitle">Create Medical Report</h2>
+                <button class="close-modal-btn" onclick="closeModal('reportModal')">&times;</button>
+            </div>
+            <form id="reportForm">
+                <input type="hidden" id="reportFormMode" value="add">
+                <input type="hidden" id="reportFormId">
+                <div class="form-group">
+                    <label for="reportFormPatient">Select Patient *</label>
+                    <select id="reportFormPatient" required>
+                        <!-- Dyn loaded -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reportFormDoctor">Select Doctor *</label>
+                    <select id="reportFormDoctor" required>
+                        <!-- Dyn loaded -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reportFormDate">Report Date *</label>
+                    <input type="date" id="reportFormDate" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('reportModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="reportSubmitBtn">Create Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Report Details Modal -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="detailModalTitle">Add Report Details</h2>
+                <button class="close-modal-btn" onclick="closeModal('detailModal')">&times;</button>
+            </div>
+            <form id="detailForm">
+                <input type="hidden" id="detailFormMode" value="add">
+                <div class="form-group" id="detailFormReportGroup">
+                    <label for="detailFormReport">Select Medical Report *</label>
+                    <select id="detailFormReport" required>
+                        <!-- Dyn loaded -->
+                    </select>
+                </div>
+                <div class="form-group" id="detailFormTestGroup">
+                    <label for="detailFormTest">Select Test *</label>
+                    <select id="detailFormTest" required>
+                        <!-- Dyn loaded -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="detailFormResult">Test Result *</label>
+                    <textarea id="detailFormResult" rows="3" placeholder="Enter findings (cannot be empty)" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="detailFormDiagnosis">Diagnosis *</label>
+                    <textarea id="detailFormDiagnosis" rows="3" placeholder="Enter diagnosis (cannot be empty)" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('detailModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="detailSubmitBtn">Save Details</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal modal-danger" id="deleteConfirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Deletion</h2>
+                <button class="close-modal-btn" onclick="closeModal('deleteConfirmModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this record? This action cannot be undone and may fail if it is referenced in other database entries.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('deleteConfirmModal')">Cancel</button>
+                <button class="btn btn-danger" id="deleteConfirmBtn">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
