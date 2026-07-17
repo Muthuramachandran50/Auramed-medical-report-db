@@ -22,6 +22,10 @@ public class WebServer {
 
     public static void main(String[] args) {
         try {
+            // Read Dynamic Port from environment (for Cloud Hosting) or default to 8081
+            String envPort = System.getenv("PORT");
+            int port = envPort != null ? Integer.parseInt(envPort) : 8081;
+
             // Test DB connectivity first
             try (Connection testConn = DBConnection.getConnection()) {
                 System.out.println("✅ Database connection verified successfully!");
@@ -30,7 +34,7 @@ public class WebServer {
                 System.err.println("Please ensure MySQL is running and the database 'medical_report_db' exists.");
             }
 
-            HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
             
             // Serve static files
             server.createContext("/", new StaticFileHandler());
@@ -47,7 +51,7 @@ public class WebServer {
             server.createContext("/api/query/test-counts", new TestCountsQueryHandler());
 
             server.setExecutor(null); // default executor
-            System.out.println("🚀 Web Server started at http://localhost:" + PORT + "/");
+            System.out.println("🚀 Web Server started at http://localhost:" + port + "/");
             server.start();
         } catch (Exception e) {
             e.printStackTrace();
